@@ -1,0 +1,51 @@
+# Virtual environment
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Audio files
+audio/
+*.mp3
+*.wav
+*.m4a
+
+# FFmpeg executables
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
+
+# Generated data files
+segments.json
+transcription_full.json
+podcast_index.faiss
+*.faiss
+vectorizer.pkl
+
+# Stats
+stats.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Distribution
+dist/
+build/
+*.egg-info/

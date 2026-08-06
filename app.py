@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Configure Groq API
-API_KEY = os.environ.get('GROQ_API_KEY', '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')
+API_KEY = os.environ.get('GROQ_API_KEY', 'your-key')
 groq_client = Groq(api_key=API_KEY)
 
 # Verify API key works

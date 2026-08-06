@@ -1,13 +1,22 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, render_template, request, jsonify
 from build_index import PodcastSearchIndex
 from groq import Groq
 import json
 import os
+import random
 
 app = Flask(__name__)
 
-# Configure Groq API
-API_KEY = os.environ.get('GROQ_API_KEY', 'your-key')
+# Configure Groq API - Key is now loaded from .env file
+API_KEY = os.environ.get('GROQ_API_KEY')
+if not API_KEY:
+    print("❌ ERROR: GROQ_API_KEY not found!")
+    print("   Create a .env file with: GROQ_API_KEY=your-key-here")
+    exit(1)
+
 groq_client = Groq(api_key=API_KEY)
 
 # Verify API key works
@@ -20,6 +29,8 @@ try:
     print("✅ Groq API key verified successfully")
 except Exception as e:
     print(f"❌ Groq API key verification failed: {e}")
+    print("   Check your .env file has the correct key")
+    exit(1)
 
 # Initialize search index
 search_index = PodcastSearchIndex()
@@ -132,7 +143,7 @@ Give a natural, conversational response. Sound like a real person, not a bot rea
                 {"role": "user", "content": user_prompt}
             ],
             max_tokens=350,
-            temperature=0.85  # Slightly higher for more natural variation
+            temperature=0.85
         )
         
         answer = response.choices[0].message.content
@@ -159,7 +170,6 @@ def generate_simple_answer(query, segment):
     """Fallback answer - also made more natural"""
     timestamp = segment['start_formatted']
     
-    # More natural fallback responses
     templates = [
         f"Ah, interesting question! So around {timestamp} in the podcast, they touched on this. {segment['text'][:300]}... \n\nWant me to find more specific details about this?",
         
@@ -168,7 +178,6 @@ def generate_simple_answer(query, segment):
         f"Great question! The conversation around {timestamp} covers this. Basically, {segment['text'][:300]}... \n\nLet me know if you want to explore this topic more!"
     ]
     
-    import random
     return random.choice(templates)
 
 if __name__ == '__main__':
